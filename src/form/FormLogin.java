@@ -19,7 +19,7 @@ public class FormLogin extends javax.swing.JDialog {
     public FormLogin(FormMenu menu) {
         initComponents();
         conDB = KelasKoneksi.koneksiDB();
-        this.menu = menu;
+       // this.menu = menu;
     }
 
     @SuppressWarnings("unchecked")
@@ -76,11 +76,10 @@ public class FormLogin extends javax.swing.JDialog {
                     .addComponent(jLabel2)
                     .addComponent(jLabel3))
                 .addGap(79, 79, 79)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnLogin)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(txtPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
-                        .addComponent(txtUsername)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
+                    .addComponent(txtUsername)
+                    .addComponent(btnLogin, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -96,9 +95,9 @@ public class FormLogin extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addGap(37, 37, 37)
+                .addGap(43, 43, 43)
                 .addComponent(btnLogin)
-                .addGap(160, 160, 160))
+                .addGap(154, 154, 154))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -112,8 +111,7 @@ public class FormLogin extends javax.swing.JDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -125,7 +123,28 @@ public class FormLogin extends javax.swing.JDialog {
     }//GEN-LAST:event_formWindowOpened
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-
+        String user = txtUsername.getText();
+        String pass = txtPassword.getText();
+        
+        try {
+            String query=  "select * from user where username =? and password=?";
+            ps= conDB.prepareStatement(query);
+            ps.setString(1, user);
+            ps.setString(2, pass);
+            rs = ps.executeQuery();
+         
+            if (rs.next()){
+                JOptionPane.showMessageDialog(null, user + " berhasil login");
+                FormMenu.role= rs.getString("level");
+                FormMenu.loginSukses();
+                this.dispose();
+            }else{
+                JOptionPane.showMessageDialog(null, user + " gagal login");
+                FormMenu.loginGagal();
+                    }
+        }catch(SQLException e){
+            System.out.println("Error" + e.getMessage()) ;
+        }
         
     }//GEN-LAST:event_btnLoginActionPerformed
 

@@ -7,15 +7,16 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-public class FormMenu extends javax.swing.JDialog {
+public class FormMenu extends javax.swing.JFrame{
 
     private final Connection conDB;
-    public static String Role;
+    public static String role;
 
     public FormMenu() {
+        super();
         initComponents();
         conDB = KelasKoneksi.koneksiDB();
-        setMenuEnable(false);
+        setMenuEnable(true);
         loginGagal();
     }
 
@@ -29,31 +30,44 @@ public class FormMenu extends javax.swing.JDialog {
         btnDosenM.setEnabled(status);
         btnLaporanNilai.setEnabled(status);
     }
-    public void loginGagal(){
+    public static void loginGagal(){
         panelMenu.setVisible(false);
         btnLogin.setText("Login");
     }
     
-    public void loginSukses(){
+    public static void loginSukses(){
         panelMenu.setVisible(true);
         btnLogin.setText("Logout");
         
         
-        if(Role.equals("admin")){
+        if(role.equals("admin")){
             btnMatkul.setVisible(true);
             btnMhs.setVisible(true);
             btnDosen.setVisible(true);
             btnBobot.setVisible(true);
             btnDosenM.setVisible(true);
             btnUser.setVisible(true);
+            btnNilai.setVisible(false);
+            btnLaporanNilai.setVisible(false);
             
-        }else if(Role.equals("dosen")){
+        }else if(role.equals("dosen")){
+            btnMatkul.setVisible(false);
+            btnMhs.setVisible(false);
             btnDosen.setVisible(true);
-            btnDosenM.setVisible(true);
+            btnBobot.setVisible(false);
+            btnDosenM.setVisible(false);
+            btnUser.setVisible(false);
             btnNilai.setVisible(true);
-            btnLaporanNilai.setVisible(true);
-        }else if(Role.equals("mahasiswa")){
-            btnMhs.setVisible(true);
+            btnLaporanNilai.setVisible(false);
+            
+        }else if(role.equals("mahasiswa")){
+            btnMatkul.setVisible(false);
+            btnMhs.setVisible(false);
+            btnDosen.setVisible(false);
+            btnBobot.setVisible(false);
+            btnDosenM.setVisible(false);
+            btnUser.setVisible(false);
+            btnNilai.setVisible(false);
             btnLaporanNilai.setVisible(true);
         }
     }
@@ -86,7 +100,7 @@ public class FormMenu extends javax.swing.JDialog {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        panelMenu.setBackground(new java.awt.Color(255, 255, 102));
+        panelMenu.setBackground(new java.awt.Color(102, 255, 255));
 
         btnMatkul.setFont(new java.awt.Font("MV Boli", 1, 20)); // NOI18N
         btnMatkul.setText("Matkul");
@@ -191,7 +205,7 @@ public class FormMenu extends javax.swing.JDialog {
                 .addContainerGap(614, Short.MAX_VALUE))
         );
 
-        jPanel3.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel3.setBackground(new java.awt.Color(51, 51, 51));
 
         jLabel1.setFont(new java.awt.Font("MV Boli", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -218,7 +232,7 @@ public class FormMenu extends javax.swing.JDialog {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(133, Short.MAX_VALUE)
+                .addContainerGap(123, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(44, 44, 44)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -245,9 +259,12 @@ public class FormMenu extends javax.swing.JDialog {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(panelMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(panelMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 692, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -265,7 +282,7 @@ public class FormMenu extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 572, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 618, Short.MAX_VALUE)
         );
 
         pack();
@@ -301,13 +318,18 @@ public class FormMenu extends javax.swing.JDialog {
     }//GEN-LAST:event_btnDosenMActionPerformed
 
     private void btnBobotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBobotActionPerformed
-        FormBobot2 fb = new FormBobot2();
+        FormBobot fb = new FormBobot();
         fb.setVisible(true);
     }//GEN-LAST:event_btnBobotActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        FormLogin login = new FormLogin(this);
-        login.setVisible(true);
+        if(btnLogin.getText().equals("Login")){
+            FormLogin login = new FormLogin(this);
+            login.setVisible(true);
+        }else {
+            loginGagal();
+        }
+        
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnMatkul7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMatkul7ActionPerformed
@@ -315,11 +337,13 @@ public class FormMenu extends javax.swing.JDialog {
     }//GEN-LAST:event_btnMatkul7ActionPerformed
 
     private void btnNilaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNilaiActionPerformed
-        // TODO add your handling code here:
+        FormNilai fn = new FormNilai();
+        fn.setVisible(true);
     }//GEN-LAST:event_btnNilaiActionPerformed
 
     private void btnLaporanNilaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLaporanNilaiActionPerformed
-        // TODO add your handling code here:
+        FormLaporanNilai fln = new FormLaporanNilai();
+        fln.setVisible(true);
     }//GEN-LAST:event_btnLaporanNilaiActionPerformed
 
    
@@ -362,25 +386,26 @@ public class FormMenu extends javax.swing.JDialog {
                     }
                 });
                 dialog.setVisible(true);
+                
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBobot;
-    private javax.swing.JButton btnDosen;
-    private javax.swing.JButton btnDosenM;
-    private javax.swing.JButton btnLaporanNilai;
-    private javax.swing.JButton btnLogin;
-    private javax.swing.JButton btnMatkul;
-    private javax.swing.JButton btnMatkul7;
-    private javax.swing.JButton btnMhs;
-    private javax.swing.JButton btnNilai;
-    private javax.swing.JButton btnUser;
+    private static javax.swing.JButton btnBobot;
+    private static javax.swing.JButton btnDosen;
+    private static javax.swing.JButton btnDosenM;
+    private static javax.swing.JButton btnLaporanNilai;
+    private static javax.swing.JButton btnLogin;
+    private static javax.swing.JButton btnMatkul;
+    private static javax.swing.JButton btnMatkul7;
+    private static javax.swing.JButton btnMhs;
+    private static javax.swing.JButton btnNilai;
+    private static javax.swing.JButton btnUser;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel panelMenu;
+    private static javax.swing.JPanel panelMenu;
     // End of variables declaration//GEN-END:variables
 
 }

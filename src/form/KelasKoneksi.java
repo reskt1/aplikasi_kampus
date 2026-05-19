@@ -10,11 +10,12 @@ public class KelasKoneksi {
     
     public static Connection koneksiDB(){
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");   
+            Class.forName("com.mysql.jdbc.Driver");   
             String url = "jdbc:mysql://localhost:3306/db_kampus_resky"
                        + "?useSSL=false"
                        + "&serverTimezone=UTC"
                        + "&useUnicode=true"
+                       + "&characterEncoding=UTF-8"
                        + "&characterEncoding=UTF-8";
             String user = "root";
             String pass = "";
